@@ -32,3 +32,4 @@
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
+/config/SERVICE_ACCOUNT_KEY.json
