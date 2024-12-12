@@ -1,0 +1,65 @@
+<h2 class="form-title">CSV File Importer</h2>
+
+<%= form_with url: csv_index_path, local: true, multipart: true, class: "form-container" do |form| %>
+  <div class="form-group">
+    <%= form.label :file, "Choose CSV File", class: "form-label" %>
+    <%= form.file_field :file, class: "form-control" %>
+  </div>
+  <div class="form-group">
+    <%= form.submit "Import CSV", class: "btn btn-primary" %>
+  </div>
+<% end %>
+
+<!-- Progress Bar Section (hidden by default) -->
+<div id="progress-container" style="display: none; margin-top: 20px;">
+  <p>Importing... <span id="progress-percentage">0</span>%</p>
+  <div style="background: #ddd; border-radius: 5px; overflow: hidden;">
+    <div id="progress-bar" style="background: #007bff; height: 20px; width: 0%;"></div>
+  </div>
+</div>
+
+<% if flash[:alert] %>
+  <div class="alert alert-danger">
+    <%= raw flash[:alert].gsub("\n", "<br>").html_safe %> <!-- Display error messages with line breaks -->
+  </div>
+<% end %>
+
+<% if flash[:notice] %>
+  <div class="alert alert-success">
+    <%= flash[:notice] %> <!-- Success message -->
+  </div>
+<% end %>
+
+<!-- Add JavaScript for Polling -->
+<%= javascript_importmap_tags %> <!-- Ensure Importmap is included -->
+<script type="module">
+  document.addEventListener("DOMContentLoaded", function () {
+    const form = document.querySelector(".form-container");
+    const progressContainer = document.getElementById("progress-container");
+    const progressBar = document.getElementById("progress-bar");
+    const progressPercentage = document.getElementById("progress-percentage");
+
+    form.addEventListener("submit", function (event) {
+      // Show the progress container when form is submitted
+      progressContainer.style.display = "block";
+
+      // Start polling the progress endpoint
+      const interval = setInterval(function () {
+        fetch("/csv/progress")
+          .then((response) => response.json())
+          .then((data) => {
+            // Update progress bar and percentage
+            progressPercentage.textContent = data.progress;
+            progressBar.style.width = `${data.progress}%`;
+
+            // If progress reaches 100%, stop polling and show an alert
+            if (data.progress === 100) {
+              clearInterval(interval);
+              alert("CSV import complete!");
+            }
+          })
+          .catch((error) => console.error("Error fetching progress:", error));
+      }, 1000); // Poll every second
+    });
+  });
+</script>

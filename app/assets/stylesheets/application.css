@@ -1,0 +1,39 @@
+/* app/assets/stylesheets/application.css */
+.form-container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  .form-label {
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+  
+  .btn-primary {
+    background-color: #0056b3;
+    width: 135px;
+    border-color: #007bff;
+    height: 38px;
+    border-radius: 6px;
+  }
+  
+  .btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #004085;
+  }
+
+  .form-title {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
